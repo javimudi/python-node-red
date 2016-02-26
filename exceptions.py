@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-class UnathorizedException(Exception):
+class NotAuthorizedException(Exception):
     pass
 
