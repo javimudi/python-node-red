@@ -8,6 +8,7 @@ from flows import Flows
 from nodes import Nodes
 from auth import LoginStrategy
 from colours import orange, blue
+from utils import pretty
 
 class RED(object):
 
@@ -22,7 +23,9 @@ class RED(object):
         for flow in self.flows:
             response += "\"{0}\" ({1}) -> {2}\n\n".\
                 format(blue(flow.get('label')),\
-                    orange(flow.get('id')), flow.get('nodes'))
+                    orange(flow.get('id')), 
+                    pretty(flow.get('nodes'))
+                )
         return response
 
     def update(self, node):
@@ -30,12 +33,10 @@ class RED(object):
 
 def main():
     red = RED()
-
-    for flow in red.flows:
-        print
-        print
-        # node['label'] = "{0}_tmp".format(node['label'])
-        red.update(flow)
+    for i, flow in enumerate(red.flows):
+        if i == 3:
+            red.flows.update(flow)
+            
     
 
 

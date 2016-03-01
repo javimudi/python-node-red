@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-from functools import partial
+# from functools import partial
 
-COLOURS = {
+COLORS = {
     'nc': '\033[0m',
     'orange': '\033[0;33m',
     'green': '\033[0;32m',
@@ -12,17 +12,14 @@ COLOURS = {
     'grey': '\033[0;90m'
 }
 
-def colourize(text):
-    __colour__ = inspect.stack()[0][3]
+def colorize(text, color):
     return "{0}{1}{2}".\
         format(
-            COLOURS.get(__colour__),
+            COLORS.get(color),
             text,
-            COLOURS.get('nc')
+            COLORS.get('nc')
         )
 
-for k, v in COLOURS.iteritems():
-    pass
-
-orange = blue = red = grey = colourize
-
+for k, v in COLORS.iteritems():
+    definition = "def {0}(text): return colorize(text, \'{0}\')".format(k)
+    exec definition

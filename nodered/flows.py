@@ -3,8 +3,7 @@
 
 import requests
 import json
-from utils import idstripped
-
+from utils import naked, pretty
 
 class Flows(object):
     def __init__(self, host, strategy):
@@ -25,6 +24,10 @@ class Flows(object):
         else:
             raise NotImplementedError()
 
+    @property
+    def sheets(self):
+        for sheet in self:
+            yield sheet['label']
 
     def __getitem__(self, value):
         url = "{0}/flow/{1}".format(self.host, value)
@@ -39,27 +42,29 @@ class Flows(object):
             raise NotImplementedError()
 
 
-    def update(self, node):
+    def update(self, flow):
         url = "{0}/flow".format(self.host)
-        _label = node.get('label')
+        _label = flow.get('label')    
+
         if _label:
-            if _label in self:
+            if _label in self.sheets:
                 # Update
-                url += "/{0}".format(node.get('id'))
-                response = requests.post(url, 
-                    data=json.dumps(idstripped(node)),
+                url += "/{0}".format(flow.get('id'))
+                response = requests.put(url, 
+                    data=json.dumps(flow),
                     headers={"content-type": "application/json"})
             else:
                 # Add
-                print idstripped(node)
                 response = requests.post(url, 
-                    data=json.dumps(idstripped(node)),
+                    data=json.dumps(naked(flow)),
                     headers={"content-type": "application/json"})
 
-            # print response.__dict__
+            if int(response.status_code/100) % 2 == 0:
+                return True
+
 
         else:
-            exceptionmsg = "id not in {0}".format(node)
+            exceptionmsg = "label not in {0}".format(pretty(flow))
             raise KeyError(exceptionmsg)
 
 
@@ -67,5 +72,7 @@ class Flows(object):
     def __add__(self, node):
         self.update(node)
 
+    def __str__(self):
+        return pretty(self)
 
 
