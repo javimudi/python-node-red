@@ -47,11 +47,14 @@ class Flows(object):
         _label = flow.get('label')    
 
         if _label:
-            if _label in self.sheets:
-                # First delete
-                response = requests.delete(
-                    url=url+"/{0}".format(flow.get('id')),
-                    headers={"content-type": "application/json"})
+            for realflow in self:
+                if realflow.get('label') == _label:
+                    _realid = realflow.get('id')
+            
+                    # First delete
+                    response = requests.delete(
+                        url=url+"/{0}".format(_realid),
+                        headers={"content-type": "application/json"})
             
             # Then add
             response = requests.post(
@@ -59,7 +62,8 @@ class Flows(object):
                 json=naked(flow),
                 headers={"content-type": "application/json"})
 
-            return response.status_code == 204
+            welldone = response.status_code == 200
+            return welldone
 
 
         else:
