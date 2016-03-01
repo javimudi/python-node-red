@@ -36,7 +36,6 @@ def main():
     print red
 
     for flow in red.flows:
-        # flow['label'] = "WL_{0}".format(flow['label'])
         red.update(flow)
 
             

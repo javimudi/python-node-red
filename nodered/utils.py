@@ -16,29 +16,33 @@ def randomID():
 
 def naked(node):
 
-    stripped, replaces = _naked(node)
+    stripped, replacements = _naked(node)
 
     # Final parents and wires replacement
     strjson = json.dumps(stripped)
-    for key, value in replaces.iteritems():
+    for key, value in replacements.iteritems():
         strjson = strjson.replace(key, value)
 
     return json.loads(strjson)
 
 
-def _naked(node, replaces=dict()):
+def _naked(node, replacements=dict()):
 
     _id = node.get('id')
     if _id:
-        if _id not in replaces:
+        if _id in replacements:
+            replacement = replacements[_id]
+        else:
             replacement = randomID()
-            replaces[_id] = replacement
-            node['id'] = replacement
+            replacements[_id] = replacement
+            
+        
+        node['id'] = replacement
 
         _nodes = node.get('nodes')
         if _nodes:
             for innernode in _nodes:
-                innernode, _replaces = _naked(innernode, replaces)
-                replaces.update(_replaces)
+                innernode, _replaces = _naked(innernode, replacements)
+                replacements.update(_replaces)
 
-    return node, replaces
+    return node, replacements

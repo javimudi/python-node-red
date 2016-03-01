@@ -43,20 +43,19 @@ class Flows(object):
 
 
     def update(self, flow):
-        baseurl = "{0}/flow".format(self.host)
+        url = "{0}/flow".format(self.host)
         _label = flow.get('label')    
 
         if _label:
             if _label in self.sheets:
                 # First delete
-                url = baseurl + "/{0}".format(flow.get('id'))
                 response = requests.delete(
-                    url=url,
+                    url=url+"/{0}".format(flow.get('id')),
                     headers={"content-type": "application/json"})
             
             # Then add
             response = requests.post(
-                url=baseurl, 
+                url=url, 
                 json=naked(flow),
                 headers={"content-type": "application/json"})
 
