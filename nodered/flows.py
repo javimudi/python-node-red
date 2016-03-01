@@ -43,24 +43,24 @@ class Flows(object):
 
 
     def update(self, flow):
-        url = "{0}/flow".format(self.host)
+        baseurl = "{0}/flow".format(self.host)
         _label = flow.get('label')    
 
         if _label:
             if _label in self.sheets:
-                # Update
-                url += "/{0}".format(flow.get('id'))
-                response = requests.put(url, 
-                    data=json.dumps(flow),
+                # First delete
+                url = baseurl + "/{0}".format(flow.get('id'))
+                response = requests.delete(
+                    url=url,
                     headers={"content-type": "application/json"})
-            else:
-                # Add
-                response = requests.post(url, 
-                    data=json.dumps(naked(flow)),
-                    headers={"content-type": "application/json"})
+            
+            # Then add
+            response = requests.post(
+                url=baseurl, 
+                json=naked(flow),
+                headers={"content-type": "application/json"})
 
-            if int(response.status_code/100) % 2 == 0:
-                return True
+            return int(response.status_code/100) % 2 == 0
 
 
         else:

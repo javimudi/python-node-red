@@ -28,14 +28,17 @@ class RED(object):
                 )
         return response
 
-    def update(self, node):
-        self.flows.update(node)
+    def update(self, flow):
+        self.flows.update(flow)
 
 def main():
     red = RED()
-    for i, flow in enumerate(red.flows):
-        if i == 3:
-            red.flows.update(flow)
+    print red
+
+    for flow in red.flows:
+        # flow['label'] = "WL_{0}".format(flow['label'])
+        red.update(flow)
+
             
     
 
