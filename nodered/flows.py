@@ -59,7 +59,7 @@ class Flows(object):
                 json=naked(flow),
                 headers={"content-type": "application/json"})
 
-            return int(response.status_code/100) % 2 == 0
+            return response.status_code == 204
 
 
         else:
