@@ -10,7 +10,4 @@ def idstripped(node):
             for innernode in _nodes:
                 innernode = idstripped(innernode)
     else:
-        print
-        print node
-        print
         return node

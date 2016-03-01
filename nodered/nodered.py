@@ -17,12 +17,6 @@ class RED(object):
         self.host = host
         self.flows = Flows(host, strategy)
 
-    def __iter__(self):
-        return self.flows.__iter__()
-
-    def __getitem__(self, value):
-        return self.flows.__getitem__(value)
-
     def __str__(self):
         response = ""
         for flow in self.flows:
@@ -37,11 +31,11 @@ class RED(object):
 def main():
     red = RED()
 
-    for node in red:
+    for flow in red.flows:
         print
         print
         # node['label'] = "{0}_tmp".format(node['label'])
-        red.update(node)
+        red.update(flow)
     
 
 
